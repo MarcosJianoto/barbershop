@@ -30,7 +30,7 @@ public class Client {
 	private LocalDateTime dateTime;
 
 	@Column(name = "date_of_birth")
-	private LocalDateTime localDateTime;
+	private LocalDateTime dateOfBirth;
 
 	public Long getId() {
 		return id;
@@ -65,11 +65,11 @@ public class Client {
 	}
 
 	public LocalDateTime getLocalDateTime() {
-		return localDateTime;
+		return dateOfBirth;
 	}
 
 	public void setLocalDateTime(LocalDateTime localDateTime) {
-		this.localDateTime = localDateTime;
+		this.dateOfBirth = localDateTime;
 	}
 
 }
