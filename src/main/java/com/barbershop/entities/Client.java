@@ -64,11 +64,11 @@ public class Client {
 		this.dateTime = dateTime;
 	}
 
-	public LocalDateTime getLocalDateTime() {
+	public LocalDateTime getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setLocalDateTime(LocalDateTime localDateTime) {
+	public void setDateOfBirth(LocalDateTime localDateTime) {
 		this.dateOfBirth = localDateTime;
 	}
 
