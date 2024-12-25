@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.barbershop.dto.ClientDTO;
@@ -13,6 +14,7 @@ import com.barbershop.repositories.ClientRepository;
 @Service
 public class ClientService {
 
+	@Autowired
 	private ClientRepository clientRepository;
 
 	public void saveClient(ClientDTO clientDTO) {
