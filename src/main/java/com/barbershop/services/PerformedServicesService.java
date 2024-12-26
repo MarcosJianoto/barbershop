@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.barbershop.dto.PerformedServicesDTO;
 import com.barbershop.entities.Client;
@@ -40,7 +39,8 @@ public class PerformedServicesService {
 
 		PerformedServices performedServices = new PerformedServices();
 
-		if (client.isPresent() && products.isPresent() || client.isPresent() && services.isPresent()) {
+		if (client.isPresent() && products.isPresent() || client.isPresent() && services.isPresent()
+				|| client.isPresent() && products.isPresent() && services.isPresent()) {
 
 			performedServices.setClients(client.get());
 			performedServices.setPrice(performedServicesDTO.getPrice());
@@ -57,6 +57,38 @@ public class PerformedServicesService {
 			performedServicesRepository.save(performedServices);
 		}
 
+	}
+
+	public void updatePerformedServices(Long id, PerformedServicesDTO performedServicesDTO) {
+
+		Optional<PerformedServices> performedServicesFindById = performedServicesRepository.findById(id);
+
+		if (performedServicesFindById.isPresent()) {
+
+			Optional<Client> client = clientRepository.findById(performedServicesDTO.getClient());
+			Optional<Products> products = productsRepository.findById(performedServicesDTO.getProducts());
+			Optional<Services> services = servicesRepository.findById(performedServicesDTO.getServices());
+
+			if (client.isPresent() && products.isPresent() || client.isPresent() && services.isPresent()
+					|| client.isPresent() && products.isPresent() && services.isPresent()) {
+
+				PerformedServices performedServices = performedServicesFindById.get();
+
+				performedServices.setClients(client.get());
+				performedServices.setPrice(performedServicesDTO.getPrice());
+
+				if (products.isPresent()) {
+					performedServices.setProducts(products.get());
+				}
+
+				if (services.isPresent()) {
+					performedServices.setService(services.get());
+				}
+
+				performedServices.setLocalDateTime(LocalDateTime.now());
+				performedServicesRepository.save(performedServices);
+			}
+		}
 	}
 
 	public void deletePerformedServices(Long id) {
