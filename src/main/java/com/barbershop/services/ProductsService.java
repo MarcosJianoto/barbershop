@@ -59,6 +59,18 @@ public class ProductsService {
 		return products;
 	}
 
+	public void updateProduct(Long id, ProductsDTO productsDTO) {
+
+		Optional<Products> productFindById = productsRepository.findById(id);
+		if (productFindById.isPresent()) {
+			productFindById.get().setName(productsDTO.getName());
+			productFindById.get().setPrice(productsDTO.getPrice());
+			productFindById.get().setQuantity(productsDTO.getQuantity());
+			productsRepository.save(productFindById.get());
+		}
+
+	}
+
 	public void deleteProduct(Long id) {
 		productsRepository.deleteById(id);
 	}

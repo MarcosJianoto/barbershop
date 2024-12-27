@@ -26,19 +26,6 @@ public class ServicesService {
 
 	}
 
-	public void updateService(Long id, ServicesDTO servicesDTO) {
-
-		Optional<Services> findByService = servicesRepository.findById(id);
-		if (findByService.isPresent()) {
-
-			Services services = findByService.get();
-			services.setName(servicesDTO.getName());
-			services.setPrice(servicesDTO.getPrice());
-			servicesRepository.save(services);
-
-		}
-	}
-
 	public List<ServicesDTO> getServices() {
 
 		List<Services> findByServices = servicesRepository.findAll();
@@ -58,6 +45,34 @@ public class ServicesService {
 		}
 
 		return servicesDTOs;
+	}
+
+	public ServicesDTO getServiceId(Long id) {
+
+		Optional<Services> serviceFindById = servicesRepository.findById(id);
+		ServicesDTO servicesDTO = new ServicesDTO();
+
+		if (serviceFindById.isPresent()) {
+
+			servicesDTO.setId(id);
+			servicesDTO.setName(serviceFindById.get().getName());
+			servicesDTO.setPrice(serviceFindById.get().getPrice());
+		}
+		return servicesDTO;
+
+	}
+
+	public void updateService(Long id, ServicesDTO servicesDTO) {
+
+		Optional<Services> findByService = servicesRepository.findById(id);
+		if (findByService.isPresent()) {
+
+			Services services = findByService.get();
+			services.setName(servicesDTO.getName());
+			services.setPrice(servicesDTO.getPrice());
+			servicesRepository.save(services);
+
+		}
 	}
 
 	public void deleteService(Long id) {

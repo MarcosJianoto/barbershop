@@ -20,13 +20,13 @@ public class ClientController {
 	private ClientService clientService;
 
 	@PostMapping("/saveclient")
-	public ResponseEntity<Void> saveClient(ClientDTO clientDTO) {
+	public ResponseEntity<Void> saveClient(@RequestBody ClientDTO clientDTO) {
 
 		clientService.saveClient(clientDTO);
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/getclient")
+	@GetMapping("/getclient/{id}")
 	public ResponseEntity<ClientDTO> getClient(@PathVariable Long id) {
 
 		ClientDTO clientDTO = clientService.getClient(id);
@@ -39,7 +39,7 @@ public class ClientController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/deleteclient")
+	@DeleteMapping("/deleteclient/{id}")
 	public void deleteClient(@PathVariable Long id) {
 		clientService.deleteClient(id);
 	}
