@@ -61,10 +61,12 @@ public class PerformedServicesService {
 
 				performedServices.setLocalDateTime(LocalDateTime.now());
 				performedServicesRepository.save(performedServices);
+			} else {
+				throw new IllegalArgumentException(" Product not found and Service not found");
 			}
 
 		} else {
-			throw new IllegalArgumentException(" Product not found and Service not found");
+			throw new IllegalArgumentException("Client not found");
 		}
 	}
 
