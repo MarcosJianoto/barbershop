@@ -34,29 +34,38 @@ public class PerformedServicesService {
 	public void savePerformedServices(PerformedServicesDTO performedServicesDTO) {
 
 		Optional<Client> client = clientRepository.findById(performedServicesDTO.getClient());
-		Optional<Products> products = productsRepository.findById(performedServicesDTO.getProducts());
-		Optional<Services> services = servicesRepository.findById(performedServicesDTO.getServices());
 
-		PerformedServices performedServices = new PerformedServices();
+		if (client.isPresent()) {
 
-		if (client.isPresent() && products.isPresent() || client.isPresent() && services.isPresent()
-				|| client.isPresent() && products.isPresent() && services.isPresent()) {
+			if (performedServicesDTO.getProducts() != null || performedServicesDTO.getServices() != null) {
+				PerformedServices performedServices = new PerformedServices();
 
-			performedServices.setClients(client.get());
-			performedServices.setPrice(performedServicesDTO.getPrice());
+				if (performedServicesDTO.getProducts() != null) {
+					Optional<Products> products = productsRepository.findById(performedServicesDTO.getProducts());
+					if (products.isPresent()) {
+						performedServices.setProducts(products.get());
+					}
+				}
 
-			if (products.isPresent()) {
-				performedServices.setProducts(products.get());
+				if (performedServicesDTO.getServices() != null) {
+					Optional<Services> services = servicesRepository.findById(performedServicesDTO.getServices());
+
+					if (services.isPresent()) {
+						performedServices.setService(services.get());
+					}
+
+				}
+
+				performedServices.setClients(client.get());
+				performedServices.setPrice(performedServicesDTO.getPrice());
+
+				performedServices.setLocalDateTime(LocalDateTime.now());
+				performedServicesRepository.save(performedServices);
 			}
 
-			if (services.isPresent()) {
-				performedServices.setService(services.get());
-			}
-
-			performedServices.setLocalDateTime(LocalDateTime.now());
-			performedServicesRepository.save(performedServices);
+		} else {
+			throw new IllegalArgumentException(" Product not found and Service not found");
 		}
-
 	}
 
 	public void updatePerformedServices(Long id, PerformedServicesDTO performedServicesDTO) {
@@ -66,28 +75,42 @@ public class PerformedServicesService {
 		if (performedServicesFindById.isPresent()) {
 
 			Optional<Client> client = clientRepository.findById(performedServicesDTO.getClient());
-			Optional<Products> products = productsRepository.findById(performedServicesDTO.getProducts());
-			Optional<Services> services = servicesRepository.findById(performedServicesDTO.getServices());
 
-			if (client.isPresent() && products.isPresent() || client.isPresent() && services.isPresent()
-					|| client.isPresent() && products.isPresent() && services.isPresent()) {
+			if (client.isPresent()) {
 
-				PerformedServices performedServices = performedServicesFindById.get();
+				performedServicesFindById.get().setProducts(null);
+				performedServicesFindById.get().setService(null);
 
-				performedServices.setClients(client.get());
-				performedServices.setPrice(performedServicesDTO.getPrice());
+				if (performedServicesDTO.getProducts() != null || performedServicesDTO.getServices() != null) {
 
-				if (products.isPresent()) {
-					performedServices.setProducts(products.get());
+					if (performedServicesDTO.getProducts() != null) {
+						Optional<Products> products = productsRepository.findById(performedServicesDTO.getProducts());
+						if (products.isPresent()) {
+							performedServicesFindById.get().setProducts(products.get());
+						}
+					}
+
+					if (performedServicesDTO.getServices() != null) {
+						Optional<Services> services = servicesRepository.findById(performedServicesDTO.getServices());
+						if (services.isPresent()) {
+							performedServicesFindById.get().setService(services.get());
+						}
+
+					}
+
 				}
 
-				if (services.isPresent()) {
-					performedServices.setService(services.get());
-				}
+				performedServicesFindById.get().setClients(client.get());
+				performedServicesFindById.get().setPrice(performedServicesDTO.getPrice());
 
-				performedServices.setLocalDateTime(LocalDateTime.now());
-				performedServicesRepository.save(performedServices);
+				performedServicesFindById.get().setLocalDateTime(LocalDateTime.now());
+				performedServicesRepository.save(performedServicesFindById.get());
+			} else {
+				throw new IllegalArgumentException(" Product not found and Service not found");
 			}
+
+		} else {
+			throw new IllegalArgumentException(" Client id not found");
 		}
 	}
 
