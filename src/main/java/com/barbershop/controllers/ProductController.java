@@ -27,7 +27,7 @@ public class ProductController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/getproduct")
+	@GetMapping("/getproducts")
 	public ResponseEntity<List<ProductsDTO>> getProducts() {
 
 		List<ProductsDTO> listProducts = productsService.getProducts();

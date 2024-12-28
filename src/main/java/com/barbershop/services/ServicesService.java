@@ -36,6 +36,7 @@ public class ServicesService {
 			for (Services services : findByServices) {
 
 				ServicesDTO servicesDTO = new ServicesDTO();
+				servicesDTO.setId(services.getId());
 				servicesDTO.setName(services.getName());
 				servicesDTO.setPrice(services.getPrice());
 				servicesDTOs.add(servicesDTO);
@@ -54,7 +55,7 @@ public class ServicesService {
 
 		if (serviceFindById.isPresent()) {
 
-			servicesDTO.setId(id);
+			servicesDTO.setId(serviceFindById.get().getId());
 			servicesDTO.setName(serviceFindById.get().getName());
 			servicesDTO.setPrice(serviceFindById.get().getPrice());
 		}

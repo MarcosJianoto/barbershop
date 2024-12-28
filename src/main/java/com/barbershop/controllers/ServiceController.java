@@ -33,7 +33,7 @@ public class ServiceController {
 		return ResponseEntity.ok().body(getServices);
 	}
 
-	@GetMapping("/getservices/{id}")
+	@GetMapping("/getserviceid/{id}")
 	public ResponseEntity<ServicesDTO> saveService(@PathVariable Long id) {
 		ServicesDTO serviceDTO = servicesService.getServiceId(id);
 		return ResponseEntity.ok().body(serviceDTO);

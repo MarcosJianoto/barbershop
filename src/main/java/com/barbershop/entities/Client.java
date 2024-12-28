@@ -1,5 +1,6 @@
 package com.barbershop.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -30,7 +31,7 @@ public class Client {
 	private LocalDateTime dateTime;
 
 	@Column(name = "date_of_birth")
-	private LocalDateTime dateOfBirth;
+	private LocalDate dateOfBirth;
 
 	public Long getId() {
 		return id;
@@ -64,12 +65,12 @@ public class Client {
 		this.dateTime = dateTime;
 	}
 
-	public LocalDateTime getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(LocalDateTime localDateTime) {
-		this.dateOfBirth = localDateTime;
+	public void setDateOfBirth(LocalDate localDate) {
+		this.dateOfBirth = localDate;
 	}
 
 }

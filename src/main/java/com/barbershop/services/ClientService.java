@@ -1,5 +1,6 @@
 package com.barbershop.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -22,7 +23,11 @@ public class ClientService {
 		client.setName(clientDTO.getName());
 		client.setDateTime(LocalDateTime.now());
 		client.setFone(clientDTO.getFone());
-		client.setDateOfBirth(client.getDateOfBirth());
+
+		DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate dateFormat = LocalDate.parse(clientDTO.getDateOfBirth(), dts1);
+
+		client.setDateOfBirth(dateFormat);
 		clientRepository.save(client);
 	}
 
@@ -34,7 +39,9 @@ public class ClientService {
 		if (client.isPresent()) {
 			clientDTO.setId(id);
 			clientDTO.setName(client.get().getName());
-			clientDTO.setDateOfBirth(client.get().getDateOfBirth().toString());
+			if (client.get().getDateOfBirth() != null) {
+				clientDTO.setDateOfBirth(client.get().getDateOfBirth().toString());
+			}
 			clientDTO.setFone(client.get().getFone());
 			clientDTO.setDateTime(client.get().getDateTime().toString());
 
@@ -51,12 +58,9 @@ public class ClientService {
 			client.get().setName(clientDTO.getName());
 			client.get().setFone(clientDTO.getFone());
 
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-			LocalDateTime dateTime = LocalDateTime.parse(clientDTO.getDateTime(), formatter);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-			client.get().setDateTime(dateTime);
-
-			LocalDateTime birthdayHourAndDate = LocalDateTime.parse(clientDTO.getDateOfBirth(), formatter);
+			LocalDate birthdayHourAndDate = LocalDate.parse(clientDTO.getDateOfBirth(), formatter);
 			client.get().setDateOfBirth(birthdayHourAndDate);
 
 		}

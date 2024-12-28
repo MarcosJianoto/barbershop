@@ -36,6 +36,7 @@ public class ProductsService {
 
 			for (Products prods : products) {
 				ProductsDTO prod = new ProductsDTO();
+				prod.setId(prods.getId());
 				prod.setName(prods.getName());
 				prod.setPrice(prods.getPrice());
 				prod.setQuantity(prods.getQuantity());
@@ -51,6 +52,7 @@ public class ProductsService {
 		Optional<Products> productFindById = productsRepository.findById(id);
 		ProductsDTO products = new ProductsDTO();
 		if (productFindById.isPresent()) {
+			products.setId(productFindById.get().getId());
 			products.setName(productFindById.get().getName());
 			products.setPrice(productFindById.get().getPrice());
 			products.setQuantity(productFindById.get().getQuantity());

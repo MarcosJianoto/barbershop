@@ -33,7 +33,7 @@ public class ClientController {
 		return ResponseEntity.ok().body(clientDTO);
 	}
 
-	@PutMapping("/editclient")
+	@PutMapping("/updateclient/{id}")
 	public ResponseEntity<Void> editClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
 		clientService.editClient(id, clientDTO);
 		return ResponseEntity.noContent().build();
