@@ -56,12 +56,12 @@ public class PerformedServicesDTO {
 		this.price = price;
 	}
 
-	public LocalDateTime getLocalDateTime() {
+	public LocalDateTime getDateCreate() {
 		return localDateTime;
 	}
 
-	public void setLocalDateTime(LocalDateTime localDateTime) {
-		this.localDateTime = localDateTime;
+	public void setDateCreate(LocalDateTime setDateCreate) {
+		this.localDateTime = setDateCreate;
 	}
 
 }
