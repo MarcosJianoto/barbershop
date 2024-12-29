@@ -6,12 +6,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.barbershop.dto.FidelityDTO;
 import com.barbershop.dto.PerformedServicesDTO;
 import com.barbershop.entities.Client;
+import com.barbershop.entities.Fidelity;
 import com.barbershop.entities.PerformedServices;
 import com.barbershop.entities.Products;
 import com.barbershop.entities.Services;
 import com.barbershop.repositories.ClientRepository;
+import com.barbershop.repositories.FidelityRepository;
 import com.barbershop.repositories.PerformedServicesRepository;
 import com.barbershop.repositories.ProductsRepository;
 import com.barbershop.repositories.ServicesRepository;
@@ -30,6 +33,12 @@ public class PerformedServicesService {
 
 	@Autowired
 	private ServicesRepository servicesRepository;
+
+	@Autowired
+	private FidelityRepository fidelityRepository;
+
+	@Autowired
+	private FidelityService fidelityService;
 
 	public void savePerformedServices(PerformedServicesDTO performedServicesDTO) {
 
@@ -52,6 +61,26 @@ public class PerformedServicesService {
 
 					if (services.isPresent()) {
 						performedServices.setService(services.get());
+
+						// fidelity inserção.
+
+						Optional<Fidelity> fidelityFindByIdClient = fidelityRepository
+								.findByClient_Id(performedServicesDTO.getClient());
+
+						if (fidelityFindByIdClient.isPresent()) {
+
+							fidelityFindByIdClient.get().setCutsMade(fidelityFindByIdClient.get().getCutsMade() + 1);
+							if (fidelityFindByIdClient.get().getCutsMade() % 10 == 0) {
+								fidelityFindByIdClient.get()
+										.setFreeCuts(fidelityFindByIdClient.get().getFreeCuts() + 1);
+								fidelityFindByIdClient.get().setCutsMade(0);
+
+							}
+
+						} else {
+							fidelityService.saveFidelity(client.get());
+						}
+
 					}
 
 				}
@@ -61,6 +90,7 @@ public class PerformedServicesService {
 
 				performedServices.setLocalDateTime(LocalDateTime.now());
 				performedServicesRepository.save(performedServices);
+
 			} else {
 				throw new IllegalArgumentException(" Product not found and Service not found");
 			}
@@ -119,5 +149,4 @@ public class PerformedServicesService {
 	public void deletePerformedServices(Long id) {
 		performedServicesRepository.deleteById(id);
 	}
-
 }
