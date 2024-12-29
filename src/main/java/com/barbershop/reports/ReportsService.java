@@ -72,7 +72,6 @@ public class ReportsService {
 			reportGetSumDTO.setClient(clientId);
 
 			priceTotalSpent += performedServices.getPrice();
-			System.out.println(priceTotalSpent);
 
 			if (performedServices.getProducts() != null) {
 				totalProducts++;
