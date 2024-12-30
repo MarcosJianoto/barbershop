@@ -10,10 +10,12 @@ import com.barbershop.dto.FidelityDTO;
 import com.barbershop.dto.PerformedServicesDTO;
 import com.barbershop.entities.Client;
 import com.barbershop.entities.Fidelity;
+import com.barbershop.entities.FidelityConfig;
 import com.barbershop.entities.PerformedServices;
 import com.barbershop.entities.Products;
 import com.barbershop.entities.Services;
 import com.barbershop.repositories.ClientRepository;
+import com.barbershop.repositories.FidelityConfigRepository;
 import com.barbershop.repositories.FidelityRepository;
 import com.barbershop.repositories.PerformedServicesRepository;
 import com.barbershop.repositories.ProductsRepository;
@@ -38,7 +40,13 @@ public class PerformedServicesService {
 	private FidelityRepository fidelityRepository;
 
 	@Autowired
+	private FidelityConfigRepository fidelityConfigRepository;
+
+	@Autowired
 	private FidelityService fidelityService;
+
+	@Autowired
+	private FidelityConfigService fidelityConfigService;
 
 	public void savePerformedServices(PerformedServicesDTO performedServicesDTO) {
 
@@ -62,23 +70,29 @@ public class PerformedServicesService {
 					if (services.isPresent()) {
 						performedServices.setService(services.get());
 
-						// fidelity inserção.
+						// fidelity inserir se tiver fidelity habilitado.
+						if (fidelityConfigService.getFidelityIsActive()) {
 
-						Optional<Fidelity> fidelityFindByIdClient = fidelityRepository
-								.findByClient_Id(performedServicesDTO.getClient());
+							Optional<FidelityConfig> fidelityConfig = fidelityConfigRepository.findById(1L);
 
-						if (fidelityFindByIdClient.isPresent()) {
+							Optional<Fidelity> fidelityFindByIdClient = fidelityRepository
+									.findByClient_Id(performedServicesDTO.getClient());
 
-							fidelityFindByIdClient.get().setCutsMade(fidelityFindByIdClient.get().getCutsMade() + 1);
-							if (fidelityFindByIdClient.get().getCutsMade() % 10 == 0) {
+							if (fidelityFindByIdClient.isPresent()) {
+
 								fidelityFindByIdClient.get()
-										.setFreeCuts(fidelityFindByIdClient.get().getFreeCuts() + 1);
-								fidelityFindByIdClient.get().setCutsMade(0);
+										.setCutsMade(fidelityFindByIdClient.get().getCutsMade() + 1);
+								if (fidelityFindByIdClient.get().getCutsMade()
+										% fidelityConfig.get().getQuantityServiceForFidelity() == 0) {
+									fidelityFindByIdClient.get()
+											.setFreeCuts(fidelityFindByIdClient.get().getFreeCuts() + 1);
+									fidelityFindByIdClient.get().setCutsMade(0);
 
+								}
+
+							} else {
+								fidelityService.saveFidelity(client.get());
 							}
-
-						} else {
-							fidelityService.saveFidelity(client.get());
 						}
 
 					}
