@@ -35,42 +35,38 @@ public class FidelityService {
 	}
 
 	public void processFidelityForClient(Long clientId) {
+		FidelityConfig fidelityConfig = fidelityConfigRepository.findById(1L)
+				.orElseThrow(() -> new IllegalArgumentException("FidelityConfig not found"));
 
-		if (!fidelityConfigRepository.findById(1L).get().getFidelityIsActive()) {
-			return;
-		} else {
-
-			FidelityConfig fidelityConfig = fidelityConfigRepository.findById(1L)
-					.orElseThrow(() -> new IllegalArgumentException("FidelityConfig not found"));
-
-			Optional<Fidelity> fidelityFindByIdClient = fidelityRepository.findByClient_Id(clientId);
-
-			if (fidelityFindByIdClient.isPresent()) {
-
-				fidelityFindByIdClient.get().setCutsMade(fidelityFindByIdClient.get().getCutsMade() + 1);
-				if (fidelityFindByIdClient.get().getCutsMade().equals(fidelityConfig.getQuantityServiceForFidelity())) {
-					fidelityFindByIdClient.get().setFreeCuts(fidelityFindByIdClient.get().getFreeCuts() + 1);
-					fidelityFindByIdClient.get().setCutsMade(0);
-					fidelityRepository.save(fidelityFindByIdClient.get());
-
-				} else {
-					fidelityFindByIdClient.get().setCutsMade(fidelityFindByIdClient.get().getCutsMade());
-					fidelityFindByIdClient.get().setFreeCuts(fidelityFindByIdClient.get().getFreeCuts());
-					fidelityRepository.save(fidelityFindByIdClient.get());
-
-				}
-
-			} else {
-				Fidelity fidelity = new Fidelity();
-				Client client = clientRepository.findById(clientId)
-						.orElseThrow(() -> new IllegalArgumentException("Client not found"));
-				fidelity.setClient(client);
-				fidelity.setCutsMade(1);
-				fidelity.setFreeCuts(0);
-				fidelityRepository.save(fidelity);
-			}
+		if (!fidelityConfig.getFidelityIsActive()) {
+			return; // Fidelity program is inactive
 		}
 
+		Fidelity fidelity = fidelityRepository.findByClient_Id(clientId).orElseGet(() -> createNewFidelity(clientId));
+
+		updateFidelity(fidelity, fidelityConfig.getQuantityServiceForFidelity());
+	}
+
+	private Fidelity createNewFidelity(Long clientId) {
+		Client client = clientRepository.findById(clientId)
+				.orElseThrow(() -> new IllegalArgumentException("Client not found"));
+
+		Fidelity fidelity = new Fidelity();
+		fidelity.setClient(client);
+		fidelity.setCutsMade(1); // First service is already made
+		fidelity.setFreeCuts(0);
+		return fidelityRepository.save(fidelity);
+	}
+
+	private void updateFidelity(Fidelity fidelity, int servicesForFreeCut) {
+		fidelity.setCutsMade(fidelity.getCutsMade() + 1);
+
+		if (fidelity.getCutsMade() >= servicesForFreeCut) {
+			fidelity.setCutsMade(0);
+			fidelity.setFreeCuts(fidelity.getFreeCuts() + 1);
+		}
+
+		fidelityRepository.save(fidelity);
 	}
 
 }

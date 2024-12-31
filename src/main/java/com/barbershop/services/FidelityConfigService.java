@@ -18,9 +18,10 @@ public class FidelityConfigService {
 	public void saveFidelityConfig(FidelityConfigDTO fidelityConfigDTO) {
 
 		Optional<FidelityConfig> fidelityConfig = fidelityConfigRepository.findById(1L);
-
+		
 		if (fidelityConfig.isEmpty()) {
 			FidelityConfig fidelityConf = new FidelityConfig();
+			fidelityConf.setId(1L);
 			fidelityConf.setFidelityIsActive(fidelityConfigDTO.getFidelityIsActive());
 			fidelityConf.setQuantityServiceForFidelity(fidelityConfigDTO.getQuantityServiceForFidelity());
 			fidelityConfigRepository.save(fidelityConf);

@@ -64,35 +64,11 @@ public class PerformedServicesService {
 				if (performedServicesDTO.getServices() != null) {
 					Optional<Services> services = servicesRepository.findById(performedServicesDTO.getServices());
 
-					if (services.isPresent()) {
-						performedServices.setService(services.get());
+					services.ifPresent(service -> {
 
-						// fidelity inserir se tiver fidelity habilitado.
-						if (fidelityConfigRepository.findById(1L).get().getFidelityIsActive()) {
-
-							Optional<FidelityConfig> fidelityConfig = fidelityConfigRepository.findById(1L);
-
-							Optional<Fidelity> fidelityFindByIdClient = fidelityRepository
-									.findByClient_Id(performedServicesDTO.getClient());
-
-							if (fidelityFindByIdClient.isPresent()) {
-
-								fidelityFindByIdClient.get()
-										.setCutsMade(fidelityFindByIdClient.get().getCutsMade() + 1);
-								if (fidelityFindByIdClient.get().getCutsMade()
-										% fidelityConfig.get().getQuantityServiceForFidelity() == 0) {
-									fidelityFindByIdClient.get()
-											.setFreeCuts(fidelityFindByIdClient.get().getFreeCuts() + 1);
-									fidelityFindByIdClient.get().setCutsMade(0);
-
-								}
-
-							} else {
-								fidelityService.saveFidelity(client.get());
-							}
-						}
-
-					}
+						performedServices.setService(service);
+						client.ifPresent(c -> fidelityService.processFidelityForClient(c.getId()));
+					});
 
 				}
 

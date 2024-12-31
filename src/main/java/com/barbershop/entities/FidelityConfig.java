@@ -2,10 +2,7 @@ package com.barbershop.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,8 +10,6 @@ import jakarta.persistence.Table;
 public class FidelityConfig {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fidelity_sequence")
-	@SequenceGenerator(name = "fidelity_sequence", sequenceName = "fidelity_sequence", allocationSize = 1)
 	@Column(name = "id")
 	private Long id;
 
