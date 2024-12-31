@@ -45,9 +45,6 @@ public class PerformedServicesService {
 	@Autowired
 	private FidelityService fidelityService;
 
-	@Autowired
-	private FidelityConfigService fidelityConfigService;
-
 	public void savePerformedServices(PerformedServicesDTO performedServicesDTO) {
 
 		Optional<Client> client = clientRepository.findById(performedServicesDTO.getClient());
@@ -71,7 +68,7 @@ public class PerformedServicesService {
 						performedServices.setService(services.get());
 
 						// fidelity inserir se tiver fidelity habilitado.
-						if (fidelityConfigService.getFidelityIsActive()) {
+						if (fidelityConfigRepository.findById(1L).get().getFidelityIsActive()) {
 
 							Optional<FidelityConfig> fidelityConfig = fidelityConfigRepository.findById(1L);
 
