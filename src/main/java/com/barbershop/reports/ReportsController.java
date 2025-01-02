@@ -30,4 +30,11 @@ public class ReportsController {
 		return ResponseEntity.ok().body(reportGetSumDTO);
 	}
 
+	@GetMapping("/gettotalmonthspent")
+	public ResponseEntity<ReportMonthlyEarningsDTO> getTotalMonthSpent() {
+
+		ReportMonthlyEarningsDTO reportMonthlyEarningsDTO = reportsService.reportMonthlyEarnings();
+		return ResponseEntity.ok().body(reportMonthlyEarningsDTO);
+	}
+
 }

@@ -1,7 +1,13 @@
 package com.barbershop.reports;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,8 +52,8 @@ public class ReportsService {
 			if (performedServices.getProducts() != null) {
 				performed.setProducts(performedServices.getProducts().getId());
 			}
-			if (performedServices.getService() != null) {
 
+			if (performedServices.getService() != null) {
 				performed.setServices(performedServices.getService().getId());
 			}
 
@@ -64,8 +70,8 @@ public class ReportsService {
 		ReportGetSumDTO reportGetSumDTO = new ReportGetSumDTO();
 
 		Double priceTotalSpent = 0.0;
-		Double totalProducts = 0.0;
-		Double totalServices = 0.0;
+		Integer totalProducts = 0;
+		Integer totalServices = 0;
 
 		for (PerformedServices performedServices : performedServicesByIdClient) {
 
@@ -73,12 +79,8 @@ public class ReportsService {
 
 			priceTotalSpent += performedServices.getPrice();
 
-			if (performedServices.getProducts() != null) {
-				totalProducts++;
-			}
-			if (performedServices.getService() != null) {
-				totalServices++;
-			}
+			totalProducts = (performedServices.getProducts() != null ? totalProducts++ : totalProducts);
+			totalServices = (performedServices.getService() != null ? totalServices++ : totalServices);
 
 			reportGetSumDTO.setTotalProducts(totalProducts);
 			reportGetSumDTO.setTotalServices(totalServices);
@@ -87,6 +89,35 @@ public class ReportsService {
 
 		}
 		return reportGetSumDTO;
+	}
+
+	public ReportMonthlyEarningsDTO reportMonthlyEarnings() {
+
+		LocalDateTime firstDayPassMonth = LocalDateTime.now().minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+		LocalDateTime lastDayPassMonth = LocalDateTime.now().minusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
+
+		List<PerformedServices> performedAllPerformedServices = performedServicesRepository
+				.findByLocalDateTimeBetween(firstDayPassMonth, lastDayPassMonth);
+
+		Double totalSpent = 0.0;
+		Integer totalCuts = 0;
+		Integer totalProducts = 0;
+
+		for (PerformedServices x : performedAllPerformedServices) {
+
+			totalSpent += x.getPrice();
+
+			totalProducts = (x.getProducts() != null ? totalProducts++ : totalProducts);
+			totalCuts = (x.getService() != null ? totalCuts++ : totalCuts);
+
+		}
+
+		ReportMonthlyEarningsDTO reportMonthlyEarningsDTO = new ReportMonthlyEarningsDTO();
+		reportMonthlyEarningsDTO.setTotalProducts(totalProducts);
+		reportMonthlyEarningsDTO.setTotalServices(totalCuts);
+		reportMonthlyEarningsDTO.setTotalSpent(totalSpent);
+
+		return reportMonthlyEarningsDTO;
 
 	}
 

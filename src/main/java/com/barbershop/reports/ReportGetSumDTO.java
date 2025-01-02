@@ -6,9 +6,9 @@ public class ReportGetSumDTO {
 
 	private Double totalSpent;
 
-	private Double totalServices;
+	private Integer totalServices;
 
-	private Double totalProducts;
+	private Integer totalProducts;
 
 	public Long getClient() {
 		return client;
@@ -26,19 +26,19 @@ public class ReportGetSumDTO {
 		this.totalSpent = totalSpent;
 	}
 
-	public Double getTotalServices() {
+	public Integer getTotalServices() {
 		return totalServices;
 	}
 
-	public void setTotalServices(Double totalServices) {
+	public void setTotalServices(Integer totalServices) {
 		this.totalServices = totalServices;
 	}
 
-	public Double getTotalProducts() {
+	public Integer getTotalProducts() {
 		return totalProducts;
 	}
 
-	public void setTotalProducts(Double totalProducts) {
+	public void setTotalProducts(Integer totalProducts) {
 		this.totalProducts = totalProducts;
 	}
 
