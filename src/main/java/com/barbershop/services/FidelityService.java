@@ -1,7 +1,5 @@
 package com.barbershop.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,6 @@ import com.barbershop.entities.FidelityConfig;
 import com.barbershop.repositories.ClientRepository;
 import com.barbershop.repositories.FidelityConfigRepository;
 import com.barbershop.repositories.FidelityRepository;
-import com.barbershop.repositories.PerformedServicesRepository;
 
 @Service
 public class FidelityService {
@@ -29,7 +26,7 @@ public class FidelityService {
 
 		Fidelity fidelity = new Fidelity();
 		fidelity.setClient(client);
-		fidelity.setCutsMade(1);
+		fidelity.setCutsMade(0);
 		fidelity.setFreeCuts(0);
 		fidelityRepository.save(fidelity);
 	}
@@ -53,7 +50,7 @@ public class FidelityService {
 
 		Fidelity fidelity = new Fidelity();
 		fidelity.setClient(client);
-		fidelity.setCutsMade(1); // First service is already made
+		fidelity.setCutsMade(0); // First service is already made
 		fidelity.setFreeCuts(0);
 		return fidelityRepository.save(fidelity);
 	}
