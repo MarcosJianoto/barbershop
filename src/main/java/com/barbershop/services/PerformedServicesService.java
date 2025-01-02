@@ -6,17 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.barbershop.dto.FidelityDTO;
 import com.barbershop.dto.PerformedServicesDTO;
 import com.barbershop.entities.Client;
-import com.barbershop.entities.Fidelity;
-import com.barbershop.entities.FidelityConfig;
 import com.barbershop.entities.PerformedServices;
 import com.barbershop.entities.Products;
 import com.barbershop.entities.Services;
 import com.barbershop.repositories.ClientRepository;
-import com.barbershop.repositories.FidelityConfigRepository;
-import com.barbershop.repositories.FidelityRepository;
 import com.barbershop.repositories.PerformedServicesRepository;
 import com.barbershop.repositories.ProductsRepository;
 import com.barbershop.repositories.ServicesRepository;
@@ -35,12 +30,6 @@ public class PerformedServicesService {
 
 	@Autowired
 	private ServicesRepository servicesRepository;
-
-	@Autowired
-	private FidelityRepository fidelityRepository;
-
-	@Autowired
-	private FidelityConfigRepository fidelityConfigRepository;
 
 	@Autowired
 	private FidelityService fidelityService;
