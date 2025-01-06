@@ -1,19 +1,14 @@
 package com.barbershop.reports;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.crypto.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.barbershop.dto.PerformedServicesDTO;
-import com.barbershop.entities.Client;
 import com.barbershop.entities.PerformedServices;
 import com.barbershop.repositories.ClientRepository;
 import com.barbershop.repositories.PerformedServicesRepository;
@@ -118,7 +113,7 @@ public class ReportsService {
 		reportMonthlyEarningsDTO.setTotalSpent(totalSpent);
 
 		return reportMonthlyEarningsDTO;
-
 	}
 
+	
 }
