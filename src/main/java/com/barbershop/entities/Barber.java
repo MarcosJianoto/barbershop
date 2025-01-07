@@ -23,6 +23,9 @@ public class Barber {
 
 	@Column(name = "phone_number")
 	private String phone;
+	
+	@Column(name = "is_active")
+	private Boolean isActive;
 
 	public Long getId() {
 		return id;
@@ -47,5 +50,14 @@ public class Barber {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+	
 
 }
