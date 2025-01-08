@@ -47,6 +47,31 @@ public class BarberTimeOffService {
 
 	}
 
+	public void saveBarberTimeOffAllDay(BarberTimeOffDTO barberTimeOffDTO) {
+
+		Optional<Barber> barberFindId = barberRepository.findById(barberTimeOffDTO.getBarberId());
+
+		if (barberFindId.isPresent()) {
+
+			BarberTimeOff barberTimeOff = new BarberTimeOff();
+			barberTimeOff.setBarberId(barberFindId.get());
+			barberTimeOff.setReason(barberTimeOffDTO.getReason());
+
+			DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("dd/MM/yyy");
+			LocalDate startDate = LocalDate.parse(barberTimeOffDTO.getStartTime(), dts1);
+			LocalDate endDate = LocalDate.parse(barberTimeOffDTO.getEndTime(), dts1);
+
+			LocalDateTime startTime = startDate.atTime(0, 0);
+			LocalDateTime endTime = endDate.atTime(23, 59);
+
+			barberTimeOff.setStartTime(startTime);
+			barberTimeOff.setEndTime(endTime);
+
+			barberTimeOffRepository.save(barberTimeOff);
+		}
+
+	}
+
 	public void updateBarberTimeOff(Long id, BarberTimeOffDTO barberTimeOffDTO) {
 
 		Optional<BarberTimeOff> barberTimeOff = barberTimeOffRepository.findById(id);

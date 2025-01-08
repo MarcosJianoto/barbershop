@@ -29,8 +29,17 @@ public class BarberTimeOffController {
 
 	}
 
+	@PostMapping("/savebarbertimeoffallday")
+	public ResponseEntity<Void> saveBarberTimeOffAllDay(@RequestBody BarberTimeOffDTO barberTimeOffDTO) {
+
+		barberTimeOffService.saveBarberTimeOffAllDay(barberTimeOffDTO);
+		return ResponseEntity.noContent().build();
+
+	}
+
 	@PutMapping("/editbarbertimeoff")
-	public ResponseEntity<Void> editBarber(@PathVariable Long id, @RequestBody BarberTimeOffDTO barberTimeOffDTO) {
+	public ResponseEntity<Void> editBarberTimeOff(@PathVariable Long id,
+			@RequestBody BarberTimeOffDTO barberTimeOffDTO) {
 
 		barberTimeOffService.updateBarberTimeOff(id, barberTimeOffDTO);
 		return ResponseEntity.noContent().build();
@@ -38,14 +47,14 @@ public class BarberTimeOffController {
 	}
 
 	@GetMapping("/getbarbertimeoff/{id}")
-	public ResponseEntity<BarberTimeOffDTO> getBarberId(@PathVariable Long id) {
+	public ResponseEntity<BarberTimeOffDTO> getBarberTimeOffId(@PathVariable Long id) {
 
 		BarberTimeOffDTO barberTimeOffDTO = barberTimeOffService.getBarberTimeOffId(id);
 		return ResponseEntity.ok().body(barberTimeOffDTO);
 	}
 
 	@GetMapping("/getbarbertimeoff")
-	public ResponseEntity<List<BarberTimeOffDTO>> getBarberTimeOff(@PathVariable Long id) {
+	public ResponseEntity<List<BarberTimeOffDTO>> getBarberTimeOff() {
 
 		List<BarberTimeOffDTO> barberTimeOffDTOs = barberTimeOffService.getListBarberTimeOff();
 		return ResponseEntity.ok().body(barberTimeOffDTOs);
