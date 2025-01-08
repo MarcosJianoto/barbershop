@@ -1,6 +1,6 @@
 package com.barbershop.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class BarberTimeOffDTO {
 
@@ -8,7 +8,9 @@ public class BarberTimeOffDTO {
 
 	private Long barberId;
 
-	private String date;
+	private String startTime;
+
+	private String endTime;
 
 	private String reason;
 
@@ -28,12 +30,20 @@ public class BarberTimeOffDTO {
 		this.barberId = barberId;
 	}
 
-	public String getDate() {
-		return date;
+	public String getStartTime() {
+		return startTime;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getReason() {
@@ -43,7 +53,5 @@ public class BarberTimeOffDTO {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
-	
-	
 
 }

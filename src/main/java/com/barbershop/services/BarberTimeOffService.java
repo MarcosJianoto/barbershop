@@ -1,6 +1,7 @@
 package com.barbershop.services;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +27,24 @@ public class BarberTimeOffService {
 
 	public void saveBarberTimeOff(BarberTimeOffDTO barberTimeOffDTO) {
 
-		BarberTimeOff barberTimeOff = new BarberTimeOff();
-		barberTimeOff.setBarberId(barberTimeOffDTO.getBarberId());
-		barberTimeOff.setReason(barberTimeOffDTO.getReason());
+		Optional<Barber> barberFindId = barberRepository.findById(barberTimeOffDTO.getBarberId());
 
-		DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate dateTimeOff = LocalDate.parse(barberTimeOffDTO.getDate(), dts1);
+		if (barberFindId.isPresent()) {
 
-		barberTimeOff.setDate(dateTimeOff);
+			BarberTimeOff barberTimeOff = new BarberTimeOff();
+			barberTimeOff.setBarberId(barberFindId.get());
+			barberTimeOff.setReason(barberTimeOffDTO.getReason());
 
-		barberTimeOffRepository.save(barberTimeOff);
+			DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			LocalDateTime startTime = LocalDateTime.parse(barberTimeOffDTO.getStartTime(), dts1);
+			LocalDateTime endTime = LocalDateTime.parse(barberTimeOffDTO.getEndTime(), dts1);
+
+			barberTimeOff.setStartTime(startTime);
+			barberTimeOff.setEndTime(endTime);
+
+			barberTimeOffRepository.save(barberTimeOff);
+		}
+
 	}
 
 	public void updateBarberTimeOff(Long id, BarberTimeOffDTO barberTimeOffDTO) {
@@ -46,12 +55,15 @@ public class BarberTimeOffService {
 		if (barberTimeOff.isPresent() && barberFindId.isPresent()) {
 			BarberTimeOff barb = barberTimeOff.get();
 			barb.setReason(barberTimeOffDTO.getReason());
-			barb.setBarberId(barberTimeOffDTO.getBarberId());
+			barb.setBarberId(barberFindId.get());
 
-			DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			LocalDate dateTimeOff = LocalDate.parse(barberTimeOffDTO.getDate(), dts1);
+			DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			LocalDateTime startTime = LocalDateTime.parse(barberTimeOffDTO.getStartTime(), dts1);
+			LocalDateTime endTime = LocalDateTime.parse(barberTimeOffDTO.getEndTime(), dts1);
 
-			barb.setDate(dateTimeOff);
+			barb.setStartTime(startTime);
+			barb.setEndTime(endTime);
+
 			barberTimeOffRepository.save(barb);
 
 		}
@@ -67,8 +79,9 @@ public class BarberTimeOffService {
 			BarberTimeOff barb = barbertimeOff.get();
 
 			barberTimeOffDTO.setId(id);
-			barberTimeOffDTO.setBarberId(barb.getBarberId());
-			barberTimeOffDTO.setDate(barb.getDate().toString());
+			barberTimeOffDTO.setBarberId(barb.getBarberId().getId());
+			barberTimeOffDTO.setStartTime(barb.getStartTime().toString());
+			barberTimeOffDTO.setStartTime(barb.getEndTime().toString());
 			barberTimeOffDTO.setReason(barb.getReason());
 		}
 
@@ -85,8 +98,9 @@ public class BarberTimeOffService {
 			for (BarberTimeOff barb : barberTimeOff) {
 				BarberTimeOffDTO barberTimeOffDTO = new BarberTimeOffDTO();
 				barberTimeOffDTO.setId(barb.getId());
-				barberTimeOffDTO.setBarberId(barb.getBarberId());
-				barberTimeOffDTO.setDate(barb.getDate().toString());
+				barberTimeOffDTO.setBarberId(barb.getBarberId().getId());
+				barberTimeOffDTO.setStartTime(barb.getStartTime().toString());
+				barberTimeOffDTO.setStartTime(barb.getEndTime().toString());
 				barberTimeOffDTO.setReason(barb.getReason());
 
 				barberTimeOffDTOs.add(barberTimeOffDTO);

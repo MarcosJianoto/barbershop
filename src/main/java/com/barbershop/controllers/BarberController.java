@@ -27,7 +27,7 @@ public class BarberController {
 
 	}
 
-	@PutMapping("/editbarber")
+	@PutMapping("/editbarber/{id}")
 	public ResponseEntity<Void> editBarber(@PathVariable Long id, @RequestBody BarberDTO barberDTO) {
 
 		barberService.editBarber(id, barberDTO);
@@ -35,7 +35,7 @@ public class BarberController {
 
 	}
 
-	@PutMapping("/editdisponibilitybarber")
+	@PutMapping("/editdisponibilitybarber/{id}")
 	public ResponseEntity<Void> editDisponibilityBarber(@PathVariable Long id, @RequestBody BarberDTO barberDTO) {
 
 		barberService.editDisponibilityBarber(id, barberDTO);
@@ -43,14 +43,14 @@ public class BarberController {
 
 	}
 
-	@GetMapping("/getbarber")
+	@GetMapping("/getbarber/{id}")
 	public ResponseEntity<BarberDTO> getBarber(@PathVariable Long id) {
 
 		BarberDTO barberDTO = barberService.getBarber(id);
 		return ResponseEntity.ok().body(barberDTO);
 	}
 
-	@DeleteMapping("/deletebarber")
+	@DeleteMapping("/deletebarber/{id}")
 	public void deleteBarber(@PathVariable Long id) {
 		barberService.deleteBarber(id);
 	}

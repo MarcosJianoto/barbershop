@@ -1,6 +1,7 @@
 package com.barbershop.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +11,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "barber_time_off")
 public class BarberTimeOff {
 
 	@Id
@@ -22,10 +25,13 @@ public class BarberTimeOff {
 
 	@ManyToOne
 	@JoinColumn(name = "barber_id")
-	private Long barberId;
+	private Barber barberId;
 
-	@Column(name = "date")
-	private LocalDate date;
+	@Column(name = "start_time")
+	private LocalDateTime startTime;
+
+	@Column(name = "end_time")
+	private LocalDateTime endTime;
 
 	@Column(name = "reason")
 	private String reason;
@@ -38,20 +44,28 @@ public class BarberTimeOff {
 		this.id = id;
 	}
 
-	public Long getBarberId() {
+	public Barber getBarberId() {
 		return barberId;
 	}
 
-	public void setBarberId(Long barberId) {
+	public void setBarberId(Barber barberId) {
 		this.barberId = barberId;
 	}
 
-	public LocalDate getDate() {
-		return date;
+	public LocalDateTime getStartTime() {
+		return startTime;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalDateTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getReason() {
