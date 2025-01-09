@@ -1,3 +1,5 @@
 Alterações a serem feitas no futuro:
 
+Preciso mexer nos horários, pois preciso inserir uma tabela nova a cada barbeiro. 
+Meu WorkingHoursService está errado pois está pegando de uma ENTIDADE vazia e tentando inserir nela mesma. 
 

@@ -1,7 +1,5 @@
 package com.barbershop.dto;
 
-import java.time.LocalDateTime;
-
 public class BarberTimeOffDTO {
 
 	private Long id;

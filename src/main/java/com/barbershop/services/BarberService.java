@@ -22,7 +22,6 @@ public class BarberService {
 		barber.setPhone(barberDTO.getPhone());
 		barber.setIsActive(true);
 		barberRepository.save(barber);
-
 	}
 
 	public BarberDTO getBarber(Long id) {

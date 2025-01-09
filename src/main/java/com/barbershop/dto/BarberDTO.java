@@ -1,5 +1,7 @@
 package com.barbershop.dto;
 
+import java.util.List;
+
 public class BarberDTO {
 
 	private Long id;
@@ -7,8 +9,10 @@ public class BarberDTO {
 	private String name;
 
 	private String phone;
-	
+
 	private Boolean isActive;
+
+	private List<WorkingHoursAsWeekListDTO> workingHours;
 
 	public Long getId() {
 		return id;
@@ -41,7 +45,13 @@ public class BarberDTO {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	
-	
+
+	public List<WorkingHoursAsWeekListDTO> getWorkingHoursAsWeekListDTOs() {
+		return workingHours;
+	}
+
+	public void setWorkingHoursAsWeekListDTOs(List<WorkingHoursAsWeekListDTO> workingHours) {
+		this.workingHours = workingHours;
+	}
 
 }

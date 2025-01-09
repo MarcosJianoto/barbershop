@@ -1,5 +1,7 @@
 package com.barbershop.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,25 @@ public class WorkingHoursService {
 			workingHours.setStartTime(workingHours.getStartTime());
 			workingHours.setFinishTime(workingHours.getFinishTime());
 			workingHoursRepository.save(workingHours);
+		}
+
+	}
+
+	public void saveWorkingHoursAsWeekList(BarberDTO barberDTO, WorkingHoursDTO workingHoursDTO) {
+
+		List<String> daysWeekList = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+
+		Optional<Barber> barberFindById = barberRepository.findById(barberDTO.getId());
+		WorkingHours workingHours = new WorkingHours();
+
+		if (barberFindById.isPresent()) {
+			for (String days : daysWeekList) {
+				workingHours.setBarber(barberFindById.get());
+				workingHours.setDayOfWeek(days);
+				workingHours.setStartTime(workingHoursAsWeekListDTO);
+				workingHours.setFinishTime(workingHours.getFinishTime());
+				workingHoursRepository.save(workingHours);
+			}
 		}
 
 	}
