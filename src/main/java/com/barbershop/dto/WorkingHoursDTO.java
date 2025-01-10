@@ -4,13 +4,15 @@ public class WorkingHoursDTO {
 
 	private Long id;
 
-	private Long barber;
+	private Long idBarber;
 
 	private String dayOfWeek;
 
 	private String startTime;
 
 	private String finishTime;
+
+	private Boolean workInDay;
 
 	public Long getId() {
 		return id;
@@ -21,11 +23,11 @@ public class WorkingHoursDTO {
 	}
 
 	public Long getBarber() {
-		return barber;
+		return idBarber;
 	}
 
 	public void setBarber(Long barber) {
-		this.barber = barber;
+		this.idBarber = barber;
 	}
 
 	public String getDayOfWeek() {
@@ -50,6 +52,14 @@ public class WorkingHoursDTO {
 
 	public void setFinishTime(String finishTime) {
 		this.finishTime = finishTime;
+	}
+
+	public Boolean getWorkInDay() {
+		return workInDay;
+	}
+
+	public void setWorkInDay(Boolean workInDay) {
+		this.workInDay = workInDay;
 	}
 
 }

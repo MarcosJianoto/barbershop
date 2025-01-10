@@ -1,15 +1,15 @@
 package com.barbershop.services;
 
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.barbershop.dto.BarberDTO;
 import com.barbershop.dto.WorkingHoursDTO;
 import com.barbershop.entities.Barber;
+import com.barbershop.entities.DayOfWeekEnum;
 import com.barbershop.entities.WorkingHours;
 import com.barbershop.repositories.BarberRepository;
 import com.barbershop.repositories.WorkingHoursRepository;
@@ -38,21 +38,30 @@ public class WorkingHoursService {
 
 	}
 
-	public void saveWorkingHoursAsWeekList(BarberDTO barberDTO, WorkingHoursDTO workingHoursDTO) {
+	public void saveWorkingHoursWeek(WorkingHoursDTO workingHoursDTO, Boolean checkbox) {
 
-		List<String> daysWeekList = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+		DayOfWeekEnum[] dayOfWeekEnum = DayOfWeekEnum.values();
 
-		Optional<Barber> barberFindById = barberRepository.findById(barberDTO.getId());
-		WorkingHours workingHours = new WorkingHours();
+		Optional<Barber> barberFindById = barberRepository.findById(workingHoursDTO.getBarber());
 
 		if (barberFindById.isPresent()) {
-			for (String days : daysWeekList) {
+
+			for (DayOfWeekEnum day : dayOfWeekEnum) {
+
+				WorkingHours workingHours = new WorkingHours();
 				workingHours.setBarber(barberFindById.get());
-				workingHours.setDayOfWeek(days);
-				workingHours.setStartTime(workingHoursAsWeekListDTO);
-				workingHours.setFinishTime(workingHours.getFinishTime());
+				workingHours.setDayOfWeek(day.name());
+
+				DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("H:mm:ss");
+				LocalTime startTime = LocalTime.parse(workingHoursDTO.getStartTime(), dts1);
+				LocalTime finishTime = LocalTime.parse(workingHoursDTO.getFinishTime(), dts1);
+
+				workingHours.setStartTime(startTime);
+				workingHours.setFinishTime(finishTime);
+				workingHours.setWorkInDay(workingHoursDTO.getWorkInDay());
 				workingHoursRepository.save(workingHours);
 			}
+
 		}
 
 	}
@@ -83,11 +92,14 @@ public class WorkingHoursService {
 
 		if (workingHoursFindById.isPresent() && barber.isPresent()) {
 			WorkingHours work = workingHoursFindById.get();
+			work.setBarber(barber.get());
 
-			work.setBarber(work.getBarber());
-			work.setDayOfWeek(work.getDayOfWeek());
-			work.setStartTime(work.getStartTime());
-			work.setFinishTime(work.getFinishTime());
+			DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("H:mm:ss");
+			LocalTime startTime = LocalTime.parse(workingHoursDTO.getStartTime(), dts1);
+			LocalTime finishTime = LocalTime.parse(workingHoursDTO.getFinishTime(), dts1);
+
+			work.setStartTime(startTime);
+			work.setFinishTime(finishTime);
 
 			workingHoursRepository.save(work);
 		}
@@ -95,7 +107,6 @@ public class WorkingHoursService {
 
 	public void deleteWorkingHours(Long id) {
 		workingHoursRepository.deleteById(id);
-		;
 	}
 
 }

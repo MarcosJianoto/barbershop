@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Query;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -34,6 +35,9 @@ public class WorkingHours {
 
 	@Column(name = "finish_time")
 	private LocalTime finishTime;
+
+	@Column(name = "work_in_day")
+	private Boolean workInDay;
 
 	public Long getId() {
 		return id;
@@ -73,6 +77,14 @@ public class WorkingHours {
 
 	public void setFinishTime(LocalTime finishTime) {
 		this.finishTime = finishTime;
+	}
+
+	public Boolean getWorkInDay() {
+		return workInDay;
+	}
+
+	public void setWorkInDay(Boolean workInDay) {
+		this.workInDay = workInDay;
 	}
 
 }
