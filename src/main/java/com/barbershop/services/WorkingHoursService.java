@@ -2,17 +2,21 @@ package com.barbershop.services;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.barbershop.dto.WorkingHoursDTO;
+import com.barbershop.dto.WorkingHoursDifferentDTO;
 import com.barbershop.entities.Barber;
 import com.barbershop.entities.DayOfWeekEnum;
 import com.barbershop.entities.WorkingHours;
 import com.barbershop.repositories.BarberRepository;
 import com.barbershop.repositories.WorkingHoursRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class WorkingHoursService {
@@ -62,6 +66,43 @@ public class WorkingHoursService {
 				workingHoursRepository.save(workingHours);
 			}
 
+		}
+
+	}
+
+	public void saveWorkingDifferentHoursWeek(WorkingHoursDifferentDTO workingHoursDifferentDTO, Boolean checkbox) {
+
+		Optional<Barber> barberFindById = barberRepository.findById(workingHoursDifferentDTO.getIdBarber());
+
+		if (barberFindById.isPresent()) {
+
+			List<DayOfWeekEnum> days = workingHoursDifferentDTO.getDays();
+			List<String> startTimes = workingHoursDifferentDTO.getStartTime();
+			List<String> finishTimes = workingHoursDifferentDTO.getFinishTime();
+
+			if (days.size() == startTimes.size() && days.size() == finishTimes.size()) {
+				for (int i = 0; i < days.size(); i++) {
+					WorkingHours workingHours = new WorkingHours();
+
+					workingHours.setBarber(barberFindById.get());
+					workingHours.setDayOfWeek(days.get(i).name());
+
+					DateTimeFormatter dts1 = DateTimeFormatter.ofPattern("H:mm:ss");
+					LocalTime startTime = LocalTime.parse(startTimes.get(i), dts1);
+					LocalTime finishTime = LocalTime.parse(finishTimes.get(i), dts1);
+
+					workingHours.setStartTime(startTime);
+					workingHours.setFinishTime(finishTime);
+					workingHours.setWorkInDay(workingHoursDifferentDTO.getWorkInDay());
+					workingHoursRepository.save(workingHours);
+				}
+			} else {
+				throw new IllegalArgumentException(
+						"O número de dias, horários de início e horários de término deve ser igual.");
+			}
+
+		} else {
+			throw new EntityNotFoundException("Barbeiro não encontrado.");
 		}
 
 	}
