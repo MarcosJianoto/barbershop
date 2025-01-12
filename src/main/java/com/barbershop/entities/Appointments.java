@@ -1,6 +1,7 @@
 package com.barbershop.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
@@ -40,5 +41,86 @@ public class Appointments {
 
 	@Column(name = "time")
 	private LocalTime appointmentTime;
+
+	@Column(name = "status")
+	private AppointmentsStatusEnum appointmentsStatusEnum;
+
+	@Column(name = "time")
+	private LocalDateTime createdAt;
+
+	@Column(name = "time")
+	private LocalDateTime updatedAt;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Barber getBarberId() {
+		return barberId;
+	}
+
+	public void setBarberId(Barber barberId) {
+		this.barberId = barberId;
+	}
+
+	public Client getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(Client clientId) {
+		this.clientId = clientId;
+	}
+
+	public Services getServiceId() {
+		return serviceId;
+	}
+
+	public void setServiceId(Services serviceId) {
+		this.serviceId = serviceId;
+	}
+
+	public LocalDate getAppointmentDate() {
+		return appointmentDate;
+	}
+
+	public void setAppointmentDate(LocalDate appointmentDate) {
+		this.appointmentDate = appointmentDate;
+	}
+
+	public LocalTime getAppointmentTime() {
+		return appointmentTime;
+	}
+
+	public void setAppointmentTime(LocalTime appointmentTime) {
+		this.appointmentTime = appointmentTime;
+	}
+
+	public AppointmentsStatusEnum getAppointmentsStatusEnum() {
+		return appointmentsStatusEnum;
+	}
+
+	public void setAppointmentsStatusEnum(AppointmentsStatusEnum appointmentsStatusEnum) {
+		this.appointmentsStatusEnum = appointmentsStatusEnum;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 
 }
