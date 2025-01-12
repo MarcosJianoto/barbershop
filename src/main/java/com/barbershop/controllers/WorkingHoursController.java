@@ -52,7 +52,7 @@ public class WorkingHoursController {
 
 	}
 
-	@GetMapping("/getlistworkinghoursfindbarberid/{id}")
+	@GetMapping("/getlistworkinghoursfindbarberid/{barberId}")
 	public ResponseEntity<List<WorkingHoursDTO>> getListWorkingHoursFindBarberId(@PathVariable Long barberId) {
 
 		List<WorkingHoursDTO> workingHoursDTO = workingHoursService.getWorkingHoursList(barberId);
