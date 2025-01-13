@@ -29,8 +29,8 @@ public class Appointments {
 	private Barber barberId;
 
 	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private Client clientId;
+	@JoinColumn(name = "client_fone")
+	private Client clientFone;
 
 	@ManyToOne
 	@JoinColumn(name = "service_id")
@@ -68,11 +68,11 @@ public class Appointments {
 	}
 
 	public Client getClientId() {
-		return clientId;
+		return clientFone;
 	}
 
 	public void setClientId(Client clientId) {
-		this.clientId = clientId;
+		this.clientFone = clientId;
 	}
 
 	public Services getServiceId() {
