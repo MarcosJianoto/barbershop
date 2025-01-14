@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +14,16 @@ import com.barbershop.dto.AppointmentsDTO;
 import com.barbershop.dto.AppointmentsUpdateDTO;
 import com.barbershop.entities.Appointments;
 import com.barbershop.entities.Barber;
+import com.barbershop.entities.BarberTimeOff;
 import com.barbershop.entities.Client;
 import com.barbershop.entities.Services;
+import com.barbershop.entities.WorkingHours;
 import com.barbershop.repositories.AppointmentsRepository;
 import com.barbershop.repositories.BarberRepository;
+import com.barbershop.repositories.BarberTimeOffRepository;
 import com.barbershop.repositories.ClientRepository;
 import com.barbershop.repositories.ServicesRepository;
+import com.barbershop.repositories.WorkingHoursRepository;
 
 @Service
 public class AppointmentsService {
@@ -33,6 +39,12 @@ public class AppointmentsService {
 
 	@Autowired
 	private ServicesRepository servicesRepository;
+
+	@Autowired
+	private WorkingHoursRepository workingHoursRepository;
+
+	@Autowired
+	private BarberTimeOffRepository barberTimeOffRepository;
 
 	public void saveAppointments(AppointmentsDTO appointmentsDTO) throws IllegalAccessException {
 
@@ -103,6 +115,32 @@ public class AppointmentsService {
 
 			appointmentsRepository.save(appointments);
 		}
+
+	}
+
+	public List<AppointmentsDTO> getAppointments() {
+
+		List<Barber> activeBarbers = barberRepository.findAll().stream().filter(Barber::getIsActive).toList();
+
+		if (activeBarbers.isEmpty()) {
+			throw new IllegalStateException("No active barbers found");
+		}
+
+		List<AppointmentsDTO> barberAppointmentsFree = new ArrayList<>();
+
+		for (Barber barb : activeBarbers) {
+
+			WorkingHours workingHours = workingHoursRepository.findById(barb.getId())
+					.orElseThrow(() -> new IllegalArgumentException("WorkingHours not found for BarberId"));
+
+			BarberTimeOff barberTimeOff = barberTimeOffRepository.findById(barb.getId())
+					.orElseThrow(() -> new IllegalArgumentException("BaberTimeOff not found for BarberId"));
+
+			barberAppointmentsFree.add(barb);
+
+		}
+
+		return barberAppointmentsFree;
 
 	}
 

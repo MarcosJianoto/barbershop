@@ -45,10 +45,10 @@ public class Appointments {
 	@Column(name = "status")
 	private AppointmentsStatusEnum appointmentsStatusEnum;
 
-	@Column(name = "time")
+	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 
-	@Column(name = "time")
+	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
 	public Long getId() {

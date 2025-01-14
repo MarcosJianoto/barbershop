@@ -27,6 +27,15 @@ public class Products {
 	@Column(name = "quantity")
 	private Integer quantity;
 
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "status")
+	private StatusProduct status;
+
+	@Column(name = "barcode")
+	private Long barcode;
+
 	public Long getId() {
 		return id;
 	}
@@ -57,6 +66,30 @@ public class Products {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public StatusProduct getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusProduct status) {
+		this.status = status;
+	}
+
+	public Long getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(Long barcode) {
+		this.barcode = barcode;
 	}
 
 }
