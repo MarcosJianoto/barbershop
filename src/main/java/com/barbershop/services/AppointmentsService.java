@@ -130,18 +130,23 @@ public class AppointmentsService {
 
 		for (Barber barb : activeBarbers) {
 
-			WorkingHours workingHours = workingHoursRepository.findById(barb.getId())
-					.orElseThrow(() -> new IllegalArgumentException("WorkingHours not found for BarberId"));
-
-			BarberTimeOff barberTimeOff = barberTimeOffRepository.findById(barb.getId())
-					.orElseThrow(() -> new IllegalArgumentException("BaberTimeOff not found for BarberId"));
-
-			barberAppointmentsFree.add(barb);
-
+			// verificar se o barbeiro não tem folga nesses dias.
+			// verificar os dias disponíveis do barbeiro.
+			// verificar os horários disponíveis do barbeiro.
 		}
 
 		return barberAppointmentsFree;
 
+	}
+
+	public List<WorkingHours> getWorkingHours(Long barberId) {
+		List<WorkingHours> workingHours = workingHoursRepository.findByBarber_Id(barberId);
+		return workingHours;
+	}
+
+	public List<BarberTimeOff> getBarberTimeOff(Long barberId) {
+		List<BarberTimeOff> barberTimeOffs = barberTimeOffRepository.findByBarberId(barberId);
+		return barberTimeOffs;
 	}
 
 	public void deleteAppointments(Long id) {
