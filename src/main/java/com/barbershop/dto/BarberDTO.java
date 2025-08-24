@@ -10,6 +10,16 @@ public class BarberDTO {
 
 	private Boolean isActive;
 
+	public BarberDTO() {
+	}
+
+	public BarberDTO(Long id, String name, String phone, Boolean isActive) {
+		this.id = id;
+		this.name = name;
+		this.phone = phone;
+		this.isActive = isActive;
+	}
+
 	public Long getId() {
 		return id;
 	}

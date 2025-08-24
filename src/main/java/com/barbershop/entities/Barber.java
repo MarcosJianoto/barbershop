@@ -27,6 +27,22 @@ public class Barber {
 	@Column(name = "is_active")
 	private Boolean isActive;
 
+	public Barber() {
+	}
+
+	public Barber(String name, String phone, Boolean isActive) {
+		this.name = name;
+		this.phone = phone;
+		this.isActive = isActive;
+	}
+
+	public Barber(Boolean isActive, String phone, String name, Long id) {
+		this.isActive = isActive;
+		this.phone = phone;
+		this.name = name;
+		this.id = id;
+	}
+
 	public Long getId() {
 		return id;
 	}

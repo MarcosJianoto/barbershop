@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.barbershop.dto.BarberDTO;
@@ -14,85 +13,58 @@ import com.barbershop.repositories.BarberRepository;
 @Service
 public class BarberService {
 
-	@Autowired
-	private BarberRepository barberRepository;
+    private final BarberRepository barberRepository;
 
-	public void saveBarber(BarberDTO barberDTO) {
+    public BarberService(BarberRepository barberRepository) {
+        this.barberRepository = barberRepository;
+    }
 
-		Barber barber = new Barber();
-		barber.setName(barberDTO.getName());
-		barber.setPhone(barberDTO.getPhone());
-		barber.setIsActive(true);
-		barberRepository.save(barber);
-	}
+    public Barber barberFindById(Long id) {
+        return barberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Barber not found"));
+    }
 
-	public BarberDTO getBarber(Long id) {
+    public void saveBarber(BarberDTO barberDTO) {
+        Barber barber = new Barber(barberDTO.getName(), barberDTO.getPhone(), barberDTO.getIsActive());
+        barberRepository.save(barber);
+    }
 
-		Optional<Barber> barber = barberRepository.findById(id);
-		BarberDTO barberDTO = new BarberDTO();
+    public BarberDTO getBarber(Long id) {
+        Barber barber = barberFindById(id);
+        return new BarberDTO(barber.getId(), barber.getName(), barber.getPhone(), barber.getIsActive());
+    }
 
-		if (barber.isPresent()) {
-			Barber barb = barber.get();
+    public List<BarberDTO> getBarbers() {
 
-			barberDTO.setId(id);
-			barberDTO.setName(barb.getName());
-			barberDTO.setPhone(barb.getPhone());
-			barberDTO.setIsActive(barb.getIsActive());
+        List<Barber> listBarber = barberRepository.findAll();
+        List<BarberDTO> newListBarber = new ArrayList<>();
 
-		}
-		return barberDTO;
-	}
+        if (!listBarber.isEmpty()) {
+            for (Barber barber : listBarber) {
+                BarberDTO barberDTO = new BarberDTO(barber.getId(), barber.getName(), barber.getPhone(), barber.getIsActive());
+                newListBarber.add(barberDTO);
+            }
+        }
+        return newListBarber;
+    }
 
-	public List<BarberDTO> getBarbers() {
+    public void editBarber(Long id, BarberDTO barberDTO) {
+        Barber barber = barberFindById(id);
+        barber.setName(barberDTO.getName());
+        barber.setPhone(barberDTO.getPhone());
+        barber.setIsActive(barberDTO.getIsActive());
+        barberRepository.save(barber);
+    }
 
-		List<Barber> listBarber = barberRepository.findAll();
-		List<BarberDTO> newListBarber = new ArrayList<>();
+    public void editAvailabilityBarber(Long id, BarberDTO barberDTO) {
+        Barber barber = barberFindById(id);
+        barber.setName(barber.getName());
+        barber.setPhone(barber.getPhone());
+        barber.setIsActive(barberDTO.getIsActive());
+        barberRepository.save(barber);
+    }
 
-		if(!listBarber.isEmpty()){
-			for(Barber barber: listBarber){
-				BarberDTO barberDTO = new BarberDTO();
-				barberDTO.setId(barber.getId());
-				barberDTO.setName(barber.getName());
-				barberDTO.setPhone(barber.getPhone());
-				barberDTO.setIsActive(barber.getIsActive());
-				newListBarber.add(barberDTO);
-			}
-		}
-		return newListBarber;
-	}
-
-	public void editBarber(Long id, BarberDTO barberDTO) {
-
-		Optional<Barber> barber = barberRepository.findById(id);
-
-		if (barber.isPresent()) {
-			Barber barb = barber.get();
-
-			barb.setName(barberDTO.getName());
-			barb.setPhone(barberDTO.getPhone());
-			barb.setIsActive(barberDTO.getIsActive());
-
-			barberRepository.save(barb);
-		}
-	}
-
-	public void editAvailabilityBarber(Long id, BarberDTO barberDTO) {
-
-		Optional<Barber> barber = barberRepository.findById(id);
-
-		if (barber.isPresent()) {
-			Barber barb = barber.get();
-
-			barb.setName(barb.getName());
-			barb.setPhone(barb.getPhone());
-			barb.setIsActive(barberDTO.getIsActive());
-
-			barberRepository.save(barb);
-		}
-	}
-
-	public void deleteBarber(Long id) {
-		barberRepository.deleteById(id);
-	}
+    public void deleteBarber(Long id) {
+        barberRepository.deleteById(id);
+    }
 
 }
