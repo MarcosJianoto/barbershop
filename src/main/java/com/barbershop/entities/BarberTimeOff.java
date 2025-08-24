@@ -24,7 +24,7 @@ public class BarberTimeOff {
 
 	@ManyToOne
 	@JoinColumn(name = "barber_id")
-	private Barber barberId;
+	private Barber barber;
 
 	@Column(name = "start_time")
 	private LocalDateTime startTime;
@@ -44,11 +44,11 @@ public class BarberTimeOff {
 	}
 
 	public Barber getBarberId() {
-		return barberId;
+		return barber;
 	}
 
 	public void setBarberId(Barber barberId) {
-		this.barberId = barberId;
+		this.barber = barberId;
 	}
 
 	public LocalDateTime getStartTime() {

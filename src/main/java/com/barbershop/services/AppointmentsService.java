@@ -145,7 +145,7 @@ public class AppointmentsService {
 	}
 
 	public List<BarberTimeOff> getBarberTimeOff(Long barberId) {
-		List<BarberTimeOff> barberTimeOffs = barberTimeOffRepository.findByBarberId(barberId);
+		List<BarberTimeOff> barberTimeOffs = barberTimeOffRepository.findByBarber_Id(barberId);
 		return barberTimeOffs;
 	}
 

@@ -8,6 +8,6 @@ import com.barbershop.entities.BarberTimeOff;
 
 public interface BarberTimeOffRepository extends JpaRepository<BarberTimeOff, Long> {
 
-	List<BarberTimeOff> findByBarberId(Long barberId);
+	List<BarberTimeOff> findByBarber_Id(Long barberId);
 
 }
