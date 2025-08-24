@@ -55,7 +55,6 @@ public class BarberTimeOffController {
 
 	@GetMapping("/getbarbertimeoff")
 	public ResponseEntity<List<BarberTimeOffDTO>> getBarberTimeOff() {
-
 		List<BarberTimeOffDTO> barberTimeOffDTOs = barberTimeOffService.getListBarberTimeOff();
 		return ResponseEntity.ok().body(barberTimeOffDTOs);
 	}
