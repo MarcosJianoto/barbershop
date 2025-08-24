@@ -30,6 +30,22 @@ public class Fidelity {
 	@Column(name = "free_cuts")
 	private Integer freeCuts;
 
+	public Fidelity(Long id, Client client, Integer cutsMade, Integer freeCuts) {
+		this.id = id;
+		this.client = client;
+		this.cutsMade = cutsMade;
+		this.freeCuts = freeCuts;
+	}
+
+	public Fidelity(Client client, Integer cutsMade, Integer freeCuts) {
+		this.client = client;
+		this.cutsMade = cutsMade;
+		this.freeCuts = freeCuts;
+	}
+
+	public Fidelity() {
+	}
+
 	public Long getId() {
 		return id;
 	}

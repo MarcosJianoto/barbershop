@@ -13,57 +13,59 @@ import com.barbershop.repositories.FidelityRepository;
 @Service
 public class FidelityService {
 
-	@Autowired
-	private FidelityRepository fidelityRepository;
+    @Autowired
+    private FidelityRepository fidelityRepository;
 
-	@Autowired
-	private FidelityConfigRepository fidelityConfigRepository;
+    @Autowired
+    private FidelityConfigRepository fidelityConfigRepository;
 
-	@Autowired
-	private ClientRepository clientRepository;
+    @Autowired
+    private ClientRepository clientRepository;
 
-	public void saveFidelity(Client client) {
 
-		Fidelity fidelity = new Fidelity();
-		fidelity.setClient(client);
-		fidelity.setCutsMade(0);
-		fidelity.setFreeCuts(0);
-		fidelityRepository.save(fidelity);
-	}
+    public FidelityConfig fidelityConfigFindById(Long id) {
+        return fidelityConfigRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("FidelityConfig not found"));
+    }
 
-	public void processFidelityForClient(Long clientId) {
-		FidelityConfig fidelityConfig = fidelityConfigRepository.findById(1L)
-				.orElseThrow(() -> new IllegalArgumentException("FidelityConfig not found"));
+    public Client clientFindById(Long clientId){
+        return clientRepository.findById(clientId)
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+    }
 
-		if (!fidelityConfig.getFidelityIsActive()) {
-			return; // Fidelity program is inactive
-		}
+    public Fidelity newFidelity(Client client){
+        return new Fidelity(client, 0, 0);
+    }
 
-		Fidelity fidelity = fidelityRepository.findByClient_Id(clientId).orElseGet(() -> createNewFidelity(clientId));
+    public void saveFidelity(Client client) {
+        Fidelity fidelity = newFidelity(client);
+        fidelityRepository.save(fidelity);
+    }
 
-		updateFidelity(fidelity, fidelityConfig.getQuantityServiceForFidelity());
-	}
+    public void processFidelityForClient(Long clientId) {
 
-	private Fidelity createNewFidelity(Long clientId) {
-		Client client = clientRepository.findById(clientId)
-				.orElseThrow(() -> new IllegalArgumentException("Client not found"));
+        FidelityConfig fidelityConfig = fidelityConfigFindById(1L);
+        Fidelity fidelity = fidelityRepository.findByClient_Id(clientId).orElseGet(() -> createNewFidelity(clientId));
 
-		Fidelity fidelity = new Fidelity();
-		fidelity.setClient(client);
-		fidelity.setCutsMade(0); // First service is already made
-		fidelity.setFreeCuts(0);
-		return fidelityRepository.save(fidelity);
-	}
+        updateFidelity(fidelity, fidelityConfig.getQuantityServiceForFidelity());
+    }
 
-	private void updateFidelity(Fidelity fidelity, int servicesForFreeCut) {
-		fidelity.setCutsMade(fidelity.getCutsMade() + 1);
+    private Fidelity createNewFidelity(Long clientId) {
 
-		if (fidelity.getCutsMade() >= servicesForFreeCut) {
-			fidelity.setCutsMade(0);
-			fidelity.setFreeCuts(fidelity.getFreeCuts() + 1);
-		}
+        Client client = clientFindById(clientId);
+        Fidelity fidelity = newFidelity(client);
 
-		fidelityRepository.save(fidelity);
-	}
+        return fidelityRepository.save(fidelity);
+    }
+
+    private void updateFidelity(Fidelity fidelity, int servicesForFreeCut) {
+        fidelity.setCutsMade(fidelity.getCutsMade() + 1);
+
+        if (fidelity.getCutsMade() >= servicesForFreeCut) {
+            fidelity.setCutsMade(0);
+            fidelity.setFreeCuts(fidelity.getFreeCuts() + 1);
+        }
+
+        fidelityRepository.save(fidelity);
+    }
 
 }
