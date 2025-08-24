@@ -1,5 +1,7 @@
 package com.barbershop.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,24 @@ public class BarberService {
 
 		}
 		return barberDTO;
+	}
 
+	public List<BarberDTO> getBarbers() {
+
+		List<Barber> listBarber = barberRepository.findAll();
+		List<BarberDTO> newListBarber = new ArrayList<>();
+
+		if(!listBarber.isEmpty()){
+			for(Barber barber: listBarber){
+				BarberDTO barberDTO = new BarberDTO();
+				barberDTO.setId(barber.getId());
+				barberDTO.setName(barber.getName());
+				barberDTO.setPhone(barber.getPhone());
+				barberDTO.setIsActive(barber.getIsActive());
+				newListBarber.add(barberDTO);
+			}
+		}
+		return newListBarber;
 	}
 
 	public void editBarber(Long id, BarberDTO barberDTO) {
@@ -57,7 +76,7 @@ public class BarberService {
 		}
 	}
 
-	public void editDisponibilityBarber(Long id, BarberDTO barberDTO) {
+	public void editAvailabilityBarber(Long id, BarberDTO barberDTO) {
 
 		Optional<Barber> barber = barberRepository.findById(id);
 

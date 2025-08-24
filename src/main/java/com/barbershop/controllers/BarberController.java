@@ -1,25 +1,26 @@
 package com.barbershop.controllers;
 
+import com.barbershop.entities.Barber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.barbershop.dto.BarberDTO;
 import com.barbershop.services.BarberService;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/barber")
 public class BarberController {
 
-	@Autowired
-	private BarberService barberService;
+	private final BarberService barberService;
 
-	@PostMapping("/savebarber")
+	BarberController(BarberService barberService){
+		this.barberService = barberService;
+	}
+
+	@PostMapping
 	public ResponseEntity<Void> saveBarber(@RequestBody BarberDTO barberDTO) {
 
 		barberService.saveBarber(barberDTO);
@@ -35,18 +36,23 @@ public class BarberController {
 
 	}
 
-	@PutMapping("/editdisponibilitybarber/{id}")
+	@PatchMapping("/editavailabilitybarber/{id}")
 	public ResponseEntity<Void> editDisponibilityBarber(@PathVariable Long id, @RequestBody BarberDTO barberDTO) {
 
-		barberService.editDisponibilityBarber(id, barberDTO);
+		barberService.editAvailabilityBarber(id, barberDTO);
 		return ResponseEntity.noContent().build();
 
 	}
 
-	@GetMapping("/getbarber/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<BarberDTO> getBarber(@PathVariable Long id) {
-
 		BarberDTO barberDTO = barberService.getBarber(id);
+		return ResponseEntity.ok().body(barberDTO);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<BarberDTO>> getAllBarbers() {
+		List<BarberDTO> barberDTO = barberService.getBarbers();
 		return ResponseEntity.ok().body(barberDTO);
 	}
 
