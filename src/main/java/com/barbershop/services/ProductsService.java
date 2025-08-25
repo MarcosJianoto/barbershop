@@ -14,82 +14,61 @@ import com.barbershop.repositories.ProductsRepository;
 @Service
 public class ProductsService {
 
-	@Autowired
-	private ProductsRepository productsRepository;
+    private final ProductsRepository productsRepository;
 
-	public void saveProducts(ProductsDTO productsDTO) {
+    public ProductsService(ProductsRepository productsRepository) {
+        this.productsRepository = productsRepository;
+    }
 
-		Products products = new Products();
-		products.setName(productsDTO.getName());
-		products.setPrice(productsDTO.getPrice());
-		products.setQuantity(productsDTO.getQuantity());
-		products.setStatus(productsDTO.getStatus());
-		products.setDescription(productsDTO.getDescription());
-		products.setBarcode(productsDTO.getBarcode());
-		productsRepository.save(products);
+    public void saveProducts(ProductsDTO productsDTO) {
 
-	}
+        Products products = new Products(productsDTO.getName(), productsDTO.getPrice(),
+                productsDTO.getQuantity(), productsDTO.getDescription(), productsDTO.getStatus(), productsDTO.getBarcode());
+        productsRepository.save(products);
+    }
 
-	public List<ProductsDTO> getProducts() {
+    public List<ProductsDTO> getProducts() {
 
-		List<Products> products = productsRepository.findAll();
-		List<ProductsDTO> productsDTOs = new ArrayList<>();
+        List<Products> products = productsRepository.findAll();
+        List<ProductsDTO> productsDTOs = new ArrayList<>();
 
-		if (!products.isEmpty()) {
+        if (!products.isEmpty()) {
+            for (Products prods : products) {
+                ProductsDTO prod = new ProductsDTO(prods.getId(), prods.getName(), prods.getPrice(), prods.getQuantity(),
+                        prods.getDescription(), prods.getStatus(), prods.getBarcode());
+                productsDTOs.add(prod);
+            }
+        }
 
-			for (Products prods : products) {
-				ProductsDTO prod = new ProductsDTO();
-				prod.setId(prods.getId());
-				prod.setName(prods.getName());
-				prod.setPrice(prods.getPrice());
-				prod.setQuantity(prods.getQuantity());
-				prod.setStatus(prods.getStatus());
-				prod.setDescription(prods.getDescription());
-				prod.setBarcode(prods.getBarcode());
-				productsDTOs.add(prod);
-			}
-		}
+        return productsDTOs;
+    }
 
-		return productsDTOs;
-	}
+    public Products findProductById(Long id) {
+        return productsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
 
-	public ProductsDTO getProductId(Long id) {
+    public ProductsDTO getProductId(Long id) {
 
-		Optional<Products> productFindById = productsRepository.findById(id);
-		ProductsDTO products = new ProductsDTO();
-		if (productFindById.isPresent()) {
-			Products prod = productFindById.get();
+        Products prod = findProductById(id);
+        return new ProductsDTO(prod.getId(), prod.getName(), prod.getPrice(), prod.getQuantity(),
+                prod.getDescription(), prod.getStatus(), prod.getBarcode());
+    }
 
-			products.setId(prod.getId());
-			products.setName(prod.getName());
-			products.setPrice(prod.getPrice());
-			products.setQuantity(prod.getQuantity());
-			products.setStatus(prod.getStatus());
-			products.setDescription(prod.getDescription());
-			products.setBarcode(prod.getBarcode());
-		}
+    public void updateProduct(Long id, ProductsDTO productsDTO) {
 
-		return products;
-	}
+        Products prod = findProductById(id);
+        prod.setName(productsDTO.getName());
+        prod.setPrice(productsDTO.getPrice());
+        prod.setQuantity(productsDTO.getQuantity());
+        prod.setStatus(productsDTO.getStatus());
+        prod.setDescription(productsDTO.getDescription());
+        prod.setBarcode(productsDTO.getBarcode());
+        productsRepository.save(prod);
 
-	public void updateProduct(Long id, ProductsDTO productsDTO) {
+    }
 
-		Optional<Products> productFindById = productsRepository.findById(id);
-		if (productFindById.isPresent()) {
-			Products prod = productFindById.get();
-			prod.setName(productsDTO.getName());
-			prod.setPrice(productsDTO.getPrice());
-			prod.setQuantity(productsDTO.getQuantity());
-			prod.setStatus(productsDTO.getStatus());
-			prod.setDescription(productsDTO.getDescription());
-			prod.setBarcode(productsDTO.getBarcode());
-			productsRepository.save(productFindById.get());
-		}
-
-	}
-
-	public void deleteProduct(Long id) {
-		productsRepository.deleteById(id);
-	}
+    public void deleteProduct(Long id) {
+        productsRepository.deleteById(id);
+    }
 
 }

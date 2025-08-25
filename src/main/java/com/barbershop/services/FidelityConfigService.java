@@ -16,11 +16,13 @@ import com.barbershop.repositories.FidelityRepository;
 @Service
 public class FidelityConfigService {
 
-	@Autowired
-	private FidelityConfigRepository fidelityConfigRepository;
+	private final FidelityConfigRepository fidelityConfigRepository;
+	private final FidelityRepository fidelityRepository;
 
-	@Autowired
-	private FidelityRepository fidelityRepository;
+	public FidelityConfigService(FidelityConfigRepository fidelityConfigRepository, FidelityRepository fidelityRepository){
+		this.fidelityConfigRepository = fidelityConfigRepository;
+		this.fidelityRepository = fidelityRepository;
+	}
 
 	@Transactional
 	public void saveFidelityConfig(FidelityConfigDTO fidelityConfigDTO) {

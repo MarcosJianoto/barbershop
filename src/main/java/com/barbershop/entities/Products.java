@@ -36,6 +36,26 @@ public class Products {
 	@Column(name = "barcode")
 	private Long barcode;
 
+	public Products(Long id, String name, Double price, Integer quantity, String description, StatusProduct status, Long barcode) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.description = description;
+		this.status = status;
+		this.barcode = barcode;
+	}
+	public Products(String name, Double price, Integer quantity, String description, StatusProduct status, Long barcode) {
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.description = description;
+		this.status = status;
+		this.barcode = barcode;
+	}
+	public Products() {
+	}
+
 	public Long getId() {
 		return id;
 	}

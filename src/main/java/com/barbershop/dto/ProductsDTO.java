@@ -18,6 +18,27 @@ public class ProductsDTO {
 
 	private Long barcode;
 
+	public ProductsDTO(Long id, String name, Double price, Integer quantity, String description, StatusProduct status, Long barcode) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.description = description;
+		this.status = status;
+		this.barcode = barcode;
+	}
+	public ProductsDTO(String name, Double price, Integer quantity, String description, StatusProduct status, Long barcode) {
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.description = description;
+		this.status = status;
+		this.barcode = barcode;
+	}
+	public ProductsDTO() {
+
+	}
+
 	public Long getId() {
 		return id;
 	}
