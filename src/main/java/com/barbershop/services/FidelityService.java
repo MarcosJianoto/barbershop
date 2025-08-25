@@ -22,9 +22,8 @@ public class FidelityService {
     @Autowired
     private ClientRepository clientRepository;
 
-
     public FidelityConfig fidelityConfigFindById(Long id) {
-        return fidelityConfigRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("FidelityConfig not found"));
+        return fidelityConfigRepository.findById(id).orElse(null);
     }
 
     public Client clientFindById(Long clientId){
@@ -36,9 +35,12 @@ public class FidelityService {
         return new Fidelity(client, 0, 0);
     }
 
-    public void saveFidelity(Client client) {
+    private Fidelity createNewFidelity(Long clientId) {
+
+        Client client = clientFindById(clientId);
         Fidelity fidelity = newFidelity(client);
-        fidelityRepository.save(fidelity);
+
+        return fidelityRepository.save(fidelity);
     }
 
     public void processFidelityForClient(Long clientId) {
@@ -47,14 +49,6 @@ public class FidelityService {
         Fidelity fidelity = fidelityRepository.findByClient_Id(clientId).orElseGet(() -> createNewFidelity(clientId));
 
         updateFidelity(fidelity, fidelityConfig.getQuantityServiceForFidelity());
-    }
-
-    private Fidelity createNewFidelity(Long clientId) {
-
-        Client client = clientFindById(clientId);
-        Fidelity fidelity = newFidelity(client);
-
-        return fidelityRepository.save(fidelity);
     }
 
     private void updateFidelity(Fidelity fidelity, int servicesForFreeCut) {
