@@ -24,6 +24,14 @@ public class Services {
 	@Column(name = "price")
 	private Double price;
 
+	public Services() {
+	}
+
+	public Services(String name, Double price) {
+		this.name = name;
+		this.price = price;
+	}
+
 	public Long getId() {
 		return id;
 	}

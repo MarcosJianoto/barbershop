@@ -14,70 +14,62 @@ import com.barbershop.repositories.ServicesRepository;
 @Service
 public class ServicesService {
 
-	@Autowired
-	private ServicesRepository servicesRepository;
+    private final ServicesRepository servicesRepository;
 
-	public void saveService(ServicesDTO servicesDTO) {
+    public ServicesService(ServicesRepository servicesRepository) {
+        this.servicesRepository = servicesRepository;
+    }
 
-		Services services = new Services();
-		services.setName(servicesDTO.getName());
-		services.setPrice(servicesDTO.getPrice());
-		servicesRepository.save(services);
+    public void saveService(ServicesDTO servicesDTO) {
+        Services service = new Services();
+        service.setName(servicesDTO.getName());
+        service.setPrice(servicesDTO.getPrice());
+        servicesRepository.save(service);
+    }
 
-	}
+    public List<ServicesDTO> getServices() {
 
-	public List<ServicesDTO> getServices() {
+        List<Services> findByServices = servicesRepository.findAll();
+        List<ServicesDTO> servicesDTOs = new ArrayList<>();
 
-		List<Services> findByServices = servicesRepository.findAll();
-		List<ServicesDTO> servicesDTOs = new ArrayList<>();
+        if (!findByServices.isEmpty()) {
+            for (Services services : findByServices) {
+                ServicesDTO servicesDTO = new ServicesDTO();
+                servicesDTO.setId(services.getId());
+                servicesDTO.setName(services.getName());
+                servicesDTO.setPrice(services.getPrice());
+                servicesDTOs.add(servicesDTO);
+            }
+        }
+        return servicesDTOs;
+    }
 
-		if (!findByServices.isEmpty()) {
+    public Services findServiceById(Long id) {
+        return servicesRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Service not found"));
+    }
 
-			for (Services services : findByServices) {
+    public ServicesDTO getServiceId(Long id) {
 
-				ServicesDTO servicesDTO = new ServicesDTO();
-				servicesDTO.setId(services.getId());
-				servicesDTO.setName(services.getName());
-				servicesDTO.setPrice(services.getPrice());
-				servicesDTOs.add(servicesDTO);
+        Services serviceById = findServiceById(id);
 
-			}
+        ServicesDTO servicesDTO = new ServicesDTO();
+        servicesDTO.setId(serviceById.getId());
+        servicesDTO.setName(serviceById.getName());
+        servicesDTO.setPrice(serviceById.getPrice());
+        return servicesDTO;
 
-		}
+    }
 
-		return servicesDTOs;
-	}
+    public void updateService(Long id, ServicesDTO servicesDTO) {
 
-	public ServicesDTO getServiceId(Long id) {
+        Services serviceById = findServiceById(id);
+        serviceById.setName(servicesDTO.getName());
+        serviceById.setPrice(servicesDTO.getPrice());
+        servicesRepository.save(serviceById);
+    }
 
-		Optional<Services> serviceFindById = servicesRepository.findById(id);
-		ServicesDTO servicesDTO = new ServicesDTO();
-
-		if (serviceFindById.isPresent()) {
-
-			servicesDTO.setId(serviceFindById.get().getId());
-			servicesDTO.setName(serviceFindById.get().getName());
-			servicesDTO.setPrice(serviceFindById.get().getPrice());
-		}
-		return servicesDTO;
-
-	}
-
-	public void updateService(Long id, ServicesDTO servicesDTO) {
-
-		Optional<Services> findByService = servicesRepository.findById(id);
-		if (findByService.isPresent()) {
-
-			Services services = findByService.get();
-			services.setName(servicesDTO.getName());
-			services.setPrice(servicesDTO.getPrice());
-			servicesRepository.save(services);
-
-		}
-	}
-
-	public void deleteService(Long id) {
-		servicesRepository.deleteById(id);
-	}
+    public void deleteService(Long id) {
+        servicesRepository.deleteById(id);
+    }
 
 }
